@@ -13,6 +13,7 @@ type User struct {
 	Username string `gorm:"type:varchar(20);not null" json:"username"`
 	Password string `gorm:"type:varchar(20);not null" json:"password"`
 	Role     int    `gorm:"type:int" json:"role"` // 利用role来确定权限
+	Email    string `gorm:"type:varchar(30);not null" json:"email"`
 }
 
 // 新增用户 这里面是对数据库的操作
