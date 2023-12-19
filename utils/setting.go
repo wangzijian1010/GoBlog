@@ -18,8 +18,8 @@ var (
 )
 
 func init() {
-	//file, err := ini.Load("C:\\Users\\Administrator\\Desktop\\GoBlog\\config\\config.ini")
-	file, err := ini.Load("D:\\GoBlog\\config\\config_home.ini")
+	file, err := ini.Load("C:\\Users\\Administrator\\Desktop\\GoBlog\\config\\config.ini")
+	//file, err := ini.Load("D:\\GoBlog\\config\\config_home.ini")
 
 	if err != nil {
 		fmt.Println("配置文件错误,请检查文件路径", err)
