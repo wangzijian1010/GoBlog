@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	// test for dev
 	model.InitDb()
 	routes.InitRouter()
 
