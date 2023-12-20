@@ -15,6 +15,7 @@ const (
 	ERROR_TOKEN_WORNG        = 1006 // TOKEN报错
 	ERROR_TOKEN_TYPE_WORNG   = 1007
 	// code = 2000 开头为文章模块的错误
+	ERROR_CATENAME_USED = 2001
 
 	// code = 3000 开头的时候为分类模块的错误
 )
@@ -29,6 +30,7 @@ var codemsg = map[int]string{
 	ERROR_TOKEN_RUNTIME:      "TOKEN已过期",
 	ERROR_TOKEN_WORNG:        "TOKEN不存在",
 	ERROR_TOKEN_TYPE_WORNG:   "TOKEN格式错误",
+	ERROR_CATENAME_USED:      "该分类已存在",
 }
 
 func GetErrMsg(code int) string {

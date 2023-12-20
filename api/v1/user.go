@@ -9,26 +9,6 @@ import (
 )
 
 // 查询用户是否存在
-func UserExist(c *gin.Context) {
-	// 想查询就直接调用model.CheckUser
-	var data model.User
-	_ = c.ShouldBindJSON(&data)
-	// 由于姓名是无法重复的 所以可以按照姓名来查询用户
-	code := model.CheckUser(data.Username)
-	if code == errmsg.SUCCSE {
-		model.CreateUser(&data)
-	}
-	if code == errmsg.ERROR_USERNAME_NOT_EXIST {
-		code = errmsg.ERROR_USERNAME_NOT_EXIST
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"message": errmsg.GetErrMsg(code),
-	})
-
-}
 
 // 添加用户
 func AddUser(c *gin.Context) {
@@ -114,5 +94,3 @@ func EditUser(c *gin.Context) {
 	})
 
 }
-
-// 查询单个用户
