@@ -14,6 +14,7 @@ const (
 	ERROR_TOKEN_RUNTIME      = 1005 // 运行时TOKEN报错
 	ERROR_TOKEN_WORNG        = 1006 // TOKEN报错
 	ERROR_TOKEN_TYPE_WORNG   = 1007
+	ERROR_USER_NO_RIGHT      = 1008
 	// code = 2000 开头为文章模块的错误
 	ERROR_CATENAME_USED = 2001
 
@@ -35,6 +36,7 @@ var codemsg = map[int]string{
 	ERROR_CATENAME_USED:      "该分类已存在",
 	ERROR_ARTICLE_NOT_FOUND:  "文章不存在",
 	ERROR_CATE_NOT_FOUND:     "该分类不存在",
+	ERROR_USER_NO_RIGHT:      "该用户无权限",
 }
 
 func GetErrMsg(code int) string {

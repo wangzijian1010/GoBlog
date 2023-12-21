@@ -96,3 +96,18 @@ func ScryptPW(password string) string {
 	// 利用gorm的钩子函数在传入数据库之前进行更改
 	return finalPW
 }
+
+func CheckLogin(username, password string) int {
+	var user User
+	db.Where("username = ?", username).First(&user)
+	if user.ID == 0 {
+		return errmsg.ERROR_USERNAME_NOT_EXIST
+	}
+	if ScryptPW(password) != user.Password {
+		return errmsg.ERROR_PASSWORD_WRONG
+	}
+	if user.Role != 0 {
+		return errmsg.ERROR_USER_NO_RIGHT
+	}
+	return errmsg.SUCCSE
+}
