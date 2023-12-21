@@ -33,7 +33,11 @@ func InitRouter() {
 		// 文章模块的路由接口
 		router.POST("article/add", v1.AddArticle)
 
-		// TODO router.GET("category", v1.GetArticle)
+		router.GET("article", v1.GetArt)
+
+		router.GET("article/list/:id", v1.GetCatArt)
+
+		router.GET("article/info/:id", v1.GetArtInfo)
 
 		router.PUT("article/:id", v1.EditArticle)
 

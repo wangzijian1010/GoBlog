@@ -24,9 +24,35 @@ func CreateArt(data *Article) (code int) {
 	return errmsg.SUCCSE
 }
 
-// TODO 查询分类下的所有文章
+func GetArt(pageSize, pageNum int) ([]Article, int) {
+	var articleList []Article
+	err := db.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&articleList).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, errmsg.ERROR
+	}
+	return articleList, errmsg.SUCCSE
+}
 
-// TODO 查询单个文章
+// 不管查询什么pagenum最好不填 不填的话就一次性展示 填了的话还要计算
+func GetCateArt(pageSize, pageNum, id int) (code int, article []Article) {
+	var cateArtList []Article
+
+	err = db.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid =?", id).Find(&cateArtList).Error
+	if err != nil {
+		return errmsg.ERROR_CATE_NOT_FOUND, cateArtList
+	}
+	return errmsg.SUCCSE, cateArtList
+}
+
+func GetArtInfo(id int) (Article, int) {
+	var art Article
+	err := db.Preload("Category").Where("id = ?", id).First(&art).Error
+	if err != nil {
+		return art, errmsg.ERROR_ARTICLE_NOT_FOUND
+	}
+	return art, errmsg.SUCCSE
+
+}
 
 // 编辑文章
 func EditArt(id int, data *Article) int {

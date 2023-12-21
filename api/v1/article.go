@@ -25,9 +25,63 @@ func AddArticle(c *gin.Context) {
 	})
 }
 
-// TODO 查询分类下的所有文章
+// 查询所有文章
+func GetArt(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	// 如果pagesize = 0 那就可以不分页
+	if pageSize == 0 {
+		pageSize = -1
+	}
 
-// TODO 利用文章名来查询单个文章
+	if pageNum == 0 {
+		pageNum = -1
+	}
+
+	data, code := model.GetArt(pageSize, pageNum)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+
+}
+
+// 查询cid分类下的所有文章
+func GetCatArt(c *gin.Context) {
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	id, _ := strconv.Atoi(c.Param("id"))
+	// 如果pagesize = 0 那就可以不分页
+	if pageSize == 0 {
+		pageSize = -1
+	}
+
+	if pageNum == 0 {
+		pageNum = -1
+	}
+
+	code, data := model.GetCateArt(pageSize, pageNum, id)
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+
+}
+
+// TODO 利用文章id来查询单个文章
+func GetArtInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id")) // 这个返回的字符串 要将id转换为int
+	data, code := model.GetArtInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
 
 // 删除文章
 func DeleteArticle(c *gin.Context) {
