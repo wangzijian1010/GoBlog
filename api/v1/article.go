@@ -72,7 +72,7 @@ func GetCatArt(c *gin.Context) {
 
 }
 
-// TODO 利用文章id来查询单个文章
+// 利用文章id来查询单个文章
 func GetArtInfo(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id")) // 这个返回的字符串 要将id转换为int
 	data, code := model.GetArtInfo(id)
