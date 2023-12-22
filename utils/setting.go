@@ -16,6 +16,11 @@ var (
 	DbUser     string
 	DbPassWord string
 	DbName     string
+
+	AccessKey   string
+	SecretKey   string
+	Bucket      string
+	QiniuServer string
 )
 
 func init() {
@@ -27,6 +32,8 @@ func init() {
 	}
 	LoadServer(file)
 	LoadData(file)
+	// TODO 视频里面没有load这个创建的函数 我忘记打了
+	LoadQiniu(file)
 
 }
 
@@ -46,4 +53,11 @@ func LoadData(file *ini.File) {
 	DbPassWord = file.Section("database").Key("DbPassWord").MustString("123456")
 	DbName = file.Section("database").Key("DbName").MustString("ginblog")
 
+}
+
+func LoadQiniu(file *ini.File) {
+	AccessKey = file.Section("qiniu").Key("AccessKey").MustString("GgZMU9eK9F2QpgH1qGJEAjeI5dXywCJDdGYBT14e")
+	SecretKey = file.Section("qiniu").Key("SecretKey").MustString("mKsjGKePRYbJKlts_B8Ln4ThTcsu-v-TdaiKGb39")
+	Bucket = file.Section("qiniu").Key("Bucket").MustString("wangzijianblog")
+	QiniuServer = file.Section("qiniu").Key("QiniuServer").MustString("http://s61pj5xc1.hn-bkt.clouddn.com/")
 }
