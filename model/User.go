@@ -10,9 +10,10 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string `gorm:"type:varchar(20);not null" json:"username"`
-	Password string `gorm:"type:varchar(20);not null" json:"password"`
-	Role     int    `gorm:"type:int" json:"role"` // 利用role来确定权限
+	// 修改方法 避免用户不通过前端访问 直接通过api的方法访问 还是要加以限制
+	Username string `gorm:"type:varchar(20);not null" json:"username" validate:"required,min=4,max=12"`
+	Password string `gorm:"type:varchar(20);not null" json:"password" validate:"required,min=6,max=20"`
+	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" validate:"required,gte=2"` // 利用role来确定权限
 }
 
 // 新增用户 这里面是对数据库的操作
@@ -100,7 +101,8 @@ func ScryptPW(password string) string {
 func CheckLogin(username, password string) int {
 	var user User
 	db.Where("username = ?", username).First(&user)
-	if user.ID == 0 {
+	// 修改了登录权限的含义 1是管理员现在
+	if user.ID == 1 {
 		return errmsg.ERROR_USERNAME_NOT_EXIST
 	}
 	if ScryptPW(password) != user.Password {
