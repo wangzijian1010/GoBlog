@@ -9,7 +9,14 @@ require (
 	gorm.io/gorm v1.25.5
 )
 
-require golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
+require (
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
+	github.com/lestrrat-go/strftime v1.0.6 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5 // indirect
+	github.com/sirupsen/logrus v1.9.3 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
+)
 
 require (
 	github.com/bytedance/sonic v1.10.2 // indirect
