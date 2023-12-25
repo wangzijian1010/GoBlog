@@ -3,6 +3,7 @@ package v1
 import (
 	"GoBlog/model"
 	"GoBlog/utils/errmsg"
+	"GoBlog/utils/validator"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -16,8 +17,21 @@ func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
 	// 利用前端传入的数值绑定到data上面
+
+	var msg string
+	var code int
+	msg, code = validator.Validate(&data)
+
+	if code != errmsg.SUCCSE {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  code,
+			"message": msg,
+		})
+		return
+	}
+
 	// 调用model的CheckUser函数来确定里面是否有同名的名称 并返回code
-	code := model.CheckUser(data.Username)
+	code = model.CheckUser(data.Username)
 	// 利用code来判断是否有重名函数
 	if code == errmsg.SUCCSE {
 		model.CreateUser(&data)
@@ -48,11 +62,12 @@ func GetUsers(c *gin.Context) {
 		pageNum = -1
 	}
 
-	data := model.GetUsers(pageSize, pageNum)
+	data, total := model.GetUsers(pageSize, pageNum)
 	code := errmsg.SUCCSE
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code),
 	})
 
@@ -79,6 +94,7 @@ func EditUser(c *gin.Context) {
 	var data model.User
 	// 更新的时候也可以看作为post他会提交表单
 	c.ShouldBindJSON(&data)
+
 	code := model.CheckUser(data.Username)
 
 	if code == errmsg.SUCCSE {

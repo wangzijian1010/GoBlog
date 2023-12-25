@@ -30,15 +30,16 @@ func CheckCate(name string) (code int) {
 }
 
 // 查询用户列表
-func GetCate(pageSize int, PageNum int) []Category {
+func GetCate(pageSize int, PageNum int) ([]Category, int64) {
 	var cate []Category
-	// 进行分页查询 主要是为了如果SQl中的数据太多的情况下 无法在一个页面里面输出
+	var total int64
+	// 进行分页查询 主要是为了如果SQl中的数据太多	的情况下 无法在一个页面里面输出
 	// 这里就是限制输出 并将查询到的记录写道users当中
-	err = db.Limit(pageSize).Offset((PageNum - 1) * pageSize).Find(&cate).Error
+	err = db.Limit(pageSize).Offset((PageNum - 1) * pageSize).Find(&cate).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil
+		return nil, -1
 	}
-	return cate
+	return cate, total
 }
 
 // 编辑用户

@@ -11,9 +11,9 @@ import (
 type User struct {
 	gorm.Model
 	// 修改方法 避免用户不通过前端访问 直接通过api的方法访问 还是要加以限制
-	Username string `gorm:"type:varchar(20);not null" json:"username" validate:"required,min=4,max=12"`
-	Password string `gorm:"type:varchar(20);not null" json:"password" validate:"required,min=6,max=20"`
-	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" validate:"required,gte=2"` // 利用role来确定权限
+	Username string `gorm:"type:varchar(20);not null" json:"username" validate:"required,min=4,max=12" label:"用户名"`
+	Password string `gorm:"type:varchar(20);not null" json:"password" validate:"required,min=6,max=20" label:"密码"`
+	Role     int    `gorm:"type:int;DEFAULT:2" json:"role" validate:"required,gte=2" label:"角色码"` // 利用role来确定权限
 }
 
 // 新增用户 这里面是对数据库的操作
@@ -40,15 +40,16 @@ func CheckUser(username string) (code int) {
 }
 
 // 查询用户列表
-func GetUsers(pageSize int, PageNum int) []User {
+func GetUsers(pageSize int, PageNum int) ([]User, int64) {
 	var users []User
+	var total int64
 	// 进行分页查询 主要是为了如果SQl中的数据太多的情况下 无法在一个页面里面输出
 	// 这里就是限制输出 并将查询到的记录写道users当中
-	err = db.Limit(pageSize).Offset((PageNum - 1) * pageSize).Find(&users).Error
+	err = db.Limit(pageSize).Offset((PageNum - 1) * pageSize).Find(&users).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil
+		return nil, -1
 	}
-	return users
+	return users, total
 }
 
 // 编辑用户

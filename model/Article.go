@@ -24,24 +24,27 @@ func CreateArt(data *Article) (code int) {
 	return errmsg.SUCCSE
 }
 
-func GetArt(pageSize, pageNum int) ([]Article, int) {
+func GetArt(pageSize, pageNum int) ([]Article, int, int64) {
 	var articleList []Article
-	err := db.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&articleList).Error
+	var total int64
+
+	err := db.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&articleList).Count(&total).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, errmsg.ERROR
+		// 有错就返回 -1
+		return nil, errmsg.ERROR, -1
 	}
-	return articleList, errmsg.SUCCSE
+	return articleList, errmsg.SUCCSE, total
 }
 
 // 不管查询什么pagenum最好不填 不填的话就一次性展示 填了的话还要计算
-func GetCateArt(pageSize, pageNum, id int) (code int, article []Article) {
+func GetCateArt(pageSize, pageNum, id int) (code int, article []Article, total int64) {
 	var cateArtList []Article
 
-	err = db.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid =?", id).Find(&cateArtList).Error
+	err = db.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid =?", id).Find(&cateArtList).Count(&total).Error
 	if err != nil {
-		return errmsg.ERROR_CATE_NOT_FOUND, cateArtList
+		return errmsg.ERROR_CATE_NOT_FOUND, cateArtList, -1
 	}
-	return errmsg.SUCCSE, cateArtList
+	return errmsg.SUCCSE, cateArtList, total
 }
 
 func GetArtInfo(id int) (Article, int) {
